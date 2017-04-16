@@ -233,15 +233,17 @@ def save_gt(gt_dataset, labeled_cells, volume_dim, out_dim, voxel_dim, expansion
         if gt_cells == 'merged':
             #Merge cells
             volume = np.zeros(volume_dim, np.uint32)
+            z_step = int(np.round(volume.shape[0] / float(out_dim[0])))
+            out = np.zeros(out_dim, np.uint32)
             for cell in cells:
                 voxels = gt_dataset[cell][gt_region]
                 #Fill volume with cell_id
                 volume[tuple(voxels.transpose())] = int(cell)
-            #Optical resclaing
-            z_step = int(np.round(volume.shape[0] / float(out_dim[0])))
-            out = np.zeros(out_dim, np.uint32)
-            for i in range(0, volume.shape[0], z_step):
-                out[i // z_step] = imresize(volume[i], (out_dim[1], out_dim[2]), 'nearest')
+                #Optical resclaing
+                for i in range(0, volume.shape[0], z_step):
+                    resized = imresize(volume[i], (out_dim[1], out_dim[2]), interp='nearest')
+                    resized[np.nonzero(resized)] = int(cell)
+                    out[i // z_step] += resized
             sf(out, dest + fluorophore + '/', 'all_cells', False)
         else:
             #Save each cell seperatly
@@ -254,7 +256,7 @@ def save_gt(gt_dataset, labeled_cells, volume_dim, out_dim, voxel_dim, expansion
                 z_step = int(np.round(volume.shape[0] / float(out_dim[0])))
                 out = np.zeros(out_dim, np.uint32)
                 for i in range(0, volume.shape[0], z_step):
-                    out[i // z_step] = imresize(volume[i], (out_dim[1], out_dim[2]), 'nearest')
+                    out[i // z_step] = imresize(volume[i], (out_dim[1], out_dim[2]), interp='nearest')
                 #This fices a bug in the interpolation which rounds the non zero value to 255
                 out[np.nonzero(out)] = int(cell)
                 sf(out, dest + fluorophore + '/', str(cell), False)

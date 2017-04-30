@@ -1,6 +1,8 @@
 numpy
-Pillow 
+Pillow
 scipy
 images2gif
 tifffile
 configobj
+matplotlib
+argparse

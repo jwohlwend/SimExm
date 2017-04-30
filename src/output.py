@@ -50,7 +50,7 @@ from images2gif import writeGif
 def save_as_tiff(volume, path, name, rgb):
     """
     Saves the given volume at location path/name in TIFF format.
-    
+
     Args:
         volume: 3D array (z, x, y)
             the volume to save
@@ -70,7 +70,7 @@ def save_as_tiff(volume, path, name, rgb):
 def save_as_gif(volume, path, name, rgb):
     """
     Saves the given volume at location path/name in GIF format.
-    
+
     Args:
         volume: 3D array (z, x, y)
             the volume to save
@@ -89,7 +89,7 @@ def save_as_image_sequence(volume, path, name, rgb):
     """
     Saves the given volume at location path/name in a sequence of PNG images,
     with an image for each slice.
-    
+
     Args:
         volume: 3D array (z, x, y)
             the volume to save
@@ -157,7 +157,7 @@ def save(volumes, path, name, sim_channels, format, **kwargs):
         name: string
             name of the simulation experiment
         sim_channels: string ('merged' or 'splitted')
-            whether to store each channel in a separate stack or 
+            whether to store each channel in a separate stack or
             create an RGB stack for every sequence of 3 volumes
         format: string ('tiff', 'gif' or 'image sequence')
             the desired output format
@@ -188,11 +188,11 @@ def save_gt(gt_dataset, labeled_cells, volume_dim, out_dim, voxel_dim, expansion
              optics_params, path, name, gt_cells, gt_region, format, **kwargs):
     """
     Saves the ground truth stack with the given output parameters.
-    
+
     Args:
         gt_dataset: dict cell_id (string) -> region (string) -> voxels (list of (z, x, y) tuples)
-            the loaded data, in simulation format, with the cell_ids as keys pointing to 
-            a sub dict which points from cell regions to lists of voxels in the form 
+            the loaded data, in simulation format, with the cell_ids as keys pointing to
+            a sub dict which points from cell regions to lists of voxels in the form
             of (z, x, y) tuples, where each tuple is a voxel.
         labeled_cells: dict fluorophore-> list of cell_ids:
             dictionary contraining the cell_ids labeled by each of the fluorophores
@@ -233,7 +233,7 @@ def save_gt(gt_dataset, labeled_cells, volume_dim, out_dim, voxel_dim, expansion
         if gt_cells == 'merged':
             #Merge cells
             volume = np.zeros(volume_dim, np.uint32)
-            z_step = int(np.round(volume.shape[0] / float(out_dim[0])))
+            z_step = int(np.ceil(volume.shape[0] / float(out_dim[0])))
             out = np.zeros(out_dim, np.uint32)
             for cell in cells:
                 voxels = gt_dataset[cell][gt_region]

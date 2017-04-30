@@ -31,22 +31,28 @@ run.py
 Main script to run the simulation.
 """
 
-import sys
+import argparse
 from configobj import ConfigObj, flatten_errors
 from validate import Validator
-from src.load import load_gt 
+from src.load import load_gt
 from src.labeling import label
 from src.optics import resolve
 from src.output import save, save_gt
+from tifffile import imshow
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
 
-def run(config):
+def run(config, show_output = False):
     """
-    Runs the simulation using the given config. 
-    For more information on the available parameters, see configspecs.ini and the readme 
+    Runs the simulation using the given config.
+    For more information on the available parameters, see configspecs.ini and the readme
 
     Args:
-        config: dicitonary
+        config: dictionary
             the configuration dict outputed by the configobj library
+        show_output: boolean
+            if True, shows the output in a new window
     """
     gt_params = config['groundtruth']
     volume_dim = gt_params['bounds']
@@ -72,12 +78,17 @@ def run(config):
     save_gt(gt_dataset, labeled_cells, volume_dim, volumes[0].shape, voxel_dim,\
             expansion_params, optics_params, **output_params)
     print "Done!"
+    if show_output:
+        imshow(np.moveaxis(np.array(volumes), 0, 3))
+        plt.show()
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        raise IOError, 'Please give a single config file as argument'
     #Read config file
-    config_file = sys.argv[1]
+    parser = argparse.ArgumentParser(description='Run a SimExm simulation.')
+    parser.add_argument('config', type=str, help='an input config file')
+    parser.add_argument('-v', action='store_true', help='show output')
+    args = parser.parse_args()
+    config_file = args.config
     config = ConfigObj(config_file, list_values = True,  configspec='configspecs.ini')
     #Validate input configuration
     validator = Validator()
@@ -90,4 +101,4 @@ if __name__ == "__main__":
             else:
                 print 'The following section was missing:%s ' % ', '.join(section_list)
     #Run simulation
-    run(config)
+    run(config, args.v)

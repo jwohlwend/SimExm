@@ -1,5 +1,5 @@
 # SimExm
-A set of tools to simulate expansion microscopy experiments under different labeling and imaging conditions. 
+A set of tools to simulate expansion microscopy experiments under different labeling and imaging conditions.
 
 The software is fully written in Python. The following section covers basic installation and usage of SimExm.
 
@@ -9,19 +9,19 @@ The software is fully written in Python. The following section covers basic inst
 The code works in python2 exclusively. It should be easy to convert it to python3 but it's untested.
 I strongly suggest creating a virtual environment, with virtualenv or anaconda and then use the pip command above to install all the dependencies inside the environment. For instance, you can create a new environment "sim" by running:
 
-`conda create -n sim python=2`
+`conda create -n sim python=2.7`
 
 Which will modify the PYTHONPATH so that all futute programs installed through pip end up in the same virtual environment.
-To start your new environment and activate the change of path run: 
+To start your new environment and activate the change of path run:
 
-`source activate sim` 
+`source activate sim`
 
-All dependencies currently used are: numpy, Pillow, scipy, images2gif, configobj and tifffile. 
+All dependencies currently used are: numpy, Pillow, scipy, images2gif, configobj and tifffile.
 To install all at once, from the terminal, do:
 
 `pip install -r requirements.txt`  
 
-or if you didn't  use a virtual environment:
+or if you didn't use conda or a virtual environment:
 
 `sudo pip install -r requirements.txt`
 
@@ -29,7 +29,7 @@ Finally, you can go ahead and compile the psf module, courtesy of Christoph Gohl
 
 `python setup.py build_ext --inplace`
 
-Once the module has successfully compiled, you are good to go!
+Once the module has successfully compiled, you are ready to go!
 
 ## Config Specs
 
@@ -57,7 +57,7 @@ Each subsection should contain the following parameters:
 | Parameter | Type | Range | Description |
 |    ---    |  --- |  ---  |	 ---	 |
 | fluorophore |  string | one of "ATTO390", "ATTO425", " ATTO430LS", "ATTO488", "ATTO490LS", "ATTO550", "ATTO647N", "ATTO700", "Alexa350" and "Alexa790" | the fluorophore to use. More info in src/fluors.py|
-| region | string |one of "cytosol", "membrane" or any additional regions specified in the ground truth|  the region to annotate with the above fluorophore | 
+| region | string |one of "cytosol", "membrane" or any additional regions specified in the ground truth|  the region to annotate with the above fluorophore |
 | labeling_density | float | between 0.0 and 1.0 | the proportion of cells in the volume to annotate with the above fluorophore.|
 | protein_density | float | greater than 0.0 | the density of proteins to label the sample with. 1.0 is 1 fluorophore per nm^3, which is not really realistic and should provide a good upperbound.|
 | protein_noise | float | between 0.0 and 1.0 | the proportion of proteins that fly away from the labeled region. Uses a gaussian distirbution around the original location. The standard devitation for that gaussian can be modified directly in the noise function in src/labeling.py but the default should provide fairly realistic results.|
@@ -84,11 +84,11 @@ Each subsection should contain the following parameters:
 | detector_efficiency | float |  between 0.0 and 1.0 | the percentage of efficiency of the detector |
 | objective_factor | float | greater than 1.0 | the objective lens, tipically 20x, 40x |
 | pixel_size | integer | greater than 1 | the size of an output pixel in the microscope, in nanometers |
-| pinhole_radius | float | greater than 0.0 |  the pinhole radius, in micrometers | 
+| pinhole_radius | float | greater than 0.0 |  the pinhole radius, in micrometers |
 | baseline_noise | integer | greater than 0 | the average number of baseline photons detected by the system |
 | channels | - | - | subsection containing a multiple channel parameters for different lasers. Each subsection has the following parameters. See brainbow_membrane.ini for an example on how to use multiple channels. |
 | laser_wavelength | integer | between 200 and 1000 | the wavelength of the laser, in nanometers  |
-| laser_power | float | greater than 1.0 | the power of the laser, in Watts | 
+| laser_power | float | greater than 1.0 | the power of the laser, in Watts |
 | laser_percentage | float | between 0.0 and 1.0 | proportion of the laser power to use |
 | laser_filter | min, max integer tuple | - | the minimum and maximum wavelengths of the filter, in nanometers |
 
@@ -116,6 +116,8 @@ Once the config.ini file is ready, make sure that you have activated your virtua
 
 `python run.py path_to_config/config.ini`
 
+The script currently takes two options: '-h' which displays the command line help, and '-v' which displays the output of the simulation in a new window.
+
 Note that the simulation may require a decent amount of memory for large volumes. A computer with 4G of RAM can usually handle a volume of about 500 x 500 x 500 voxels without problems. If you run into memory issues, consider using a computer with more RAM.
 
 ## License
@@ -141,7 +143,3 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-
-

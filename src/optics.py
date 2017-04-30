@@ -102,7 +102,7 @@ def psf_volume(voxel_dim, expansion, fluorophore, laser_wavelength, numerical_ap
                 refractory_index, pinhole_radius, objective_factor, type, **kwargs):
     """
     Creates a point spread volume, using the given parameters.
-    
+
     Args:
         voxel_dim: (z, x, y) tuple
             the dimensions of a voxel in nm
@@ -152,7 +152,7 @@ def baseline_volume(volume_dim, baseline_noise, **kwargs):
     Args:
         volume_dim: (z, x, y) integer tuple
             the size of the volume to create
-        baseline_noise: integer 
+        baseline_noise: integer
             the mean number of photons of the poisson distribution
     Returns:
         out: numpy 3D uint32 array
@@ -167,7 +167,7 @@ def baseline_volume(volume_dim, baseline_noise, **kwargs):
 def normalize(volume):
     """
     Normalizes the volume to the [0, 255] range by dividing by the maximum value.
-    
+
     Args:
         volume: 3D numpy array, np.uint32
             the volume to normalize
@@ -178,8 +178,10 @@ def normalize(volume):
     max = np.amax(volume)
     if max == 0:#Fixes dividing by 0 error if nothing in the volume
         return volume.astype(np.uint8)
+
     normalized = volume * (255.0 / max)
     normalized = np.round(normalized).astype(np.uint8)
+    print np.amax(normalized)
     return normalized
 
 def scale(volume, voxel_dim, expansion, objective_factor,
@@ -208,11 +210,12 @@ def scale(volume, voxel_dim, expansion, objective_factor,
     xy_step = float(pixel_size) / (voxel_dim[1] * expansion * objective_factor)
     #This removes rounding artifacts, by binning with an integer number of pixels
     if xy_step < 1:
-        xy_scale = 1.0 / xy_step 
+        xy_scale = 1.0 / xy_step
         xy_scale = np.round(xy_scale)
+        print "Warning: the ground truth resolution is too low to resolve the volume with the desired expansion. Attempting a work around."
     else:
         xy_step = np.round(xy_step)
-        xy_scale = 1.0 / xy_step 
+        xy_scale = 1.0 / xy_step
     z_scale = voxel_dim[0] * expansion / float(focal_plane_depth)
     z_step = np.round(1.0 / z_scale).astype(np.int)
     out = []
@@ -223,7 +226,7 @@ def scale(volume, voxel_dim, expansion, objective_factor,
         X = np.floor(xy_scale * X).astype(np.int64)
         Y = np.floor(xy_scale * Y).astype(np.int64)
         #Create new image
-        d, w, h = np.ceil(np.array(volume.shape) * xy_scale) 
+        d, w, h = np.ceil(np.array(volume.shape) * xy_scale)
         im = np.zeros((int(w), int(h)), np.uint32)
         #Adding poisson if the volume is expanded, to avoid grid-like images
         if xy_scale > 1:
@@ -255,7 +258,7 @@ def mean_photons(fluorophore, exposure_time, objective_efficiency,\
             objective lense, tipically 0, 20 or 40
         laser_wavelength: integer
             the wavelength of the laser, in nm
-        laser_filter: integer list of length 2 
+        laser_filter: integer list of length 2
             wavelength_min and wavelength_maximum detected
         laser_power: float
             the laser power

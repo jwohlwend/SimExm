@@ -4,7 +4,7 @@ A set of tools to simulate expansion microscopy experiments under different labe
 The software is fully written in Python. The following section covers basic installation and usage of SimExm.
 
 
-##Installation
+## Installation
 
 The code works in python2 exclusively. It should be easy to convert it to python3 but it's untested.
 I strongly suggest creating a virtual environment, with virtualenv or anaconda and then use the pip command above to install all the dependencies inside the environment. For instance, you can create a new environment "sim" by running:

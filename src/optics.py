@@ -181,7 +181,6 @@ def normalize(volume):
 
     normalized = volume * (255.0 / max)
     normalized = np.round(normalized).astype(np.uint8)
-    print np.amax(normalized)
     return normalized
 
 def scale(volume, voxel_dim, expansion, objective_factor,

@@ -51,14 +51,18 @@ The specifications are outlines in the configspecs.ini file. Example configurati
 
 #### Labeling
 
-The labeling section should contain a subsection for each fluorophore used. See the example in brianbow_membrane.ini.
+| Parameter | Type | Range | Description |
+|    ---    |  --- |  ---  |	 ---	 |
+| global_density | float | between 0.0 and 1.0 | the global labeling density, determines the number of cells that can be labeled by any of the fluorophores |
+
+Additionaly, the labeling section should contain a subsection for each fluorophore used. See the example in brianbow_membrane.ini.
 Each subsection should contain the following parameters:
 
 | Parameter | Type | Range | Description |
 |    ---    |  --- |  ---  |	 ---	 |
 | fluorophore |  string | one of "ATTO390", "ATTO425", " ATTO430LS", "ATTO488", "ATTO490LS", "ATTO550", "ATTO647N", "ATTO700", "Alexa350" and "Alexa790" | the fluorophore to use. More info in src/fluors.py|
 | region | string |one of "cytosol", "membrane" or any additional regions specified in the ground truth|  the region to annotate with the above fluorophore |
-| labeling_density | float | between 0.0 and 1.0 | the proportion of cells in the volume to annotate with the above fluorophore.|
+| density | float | between 0.0 and 1.0 | the proportion of cells in the volume to annotate with the above fluorophore.|
 | protein_density | float | greater than 0.0 | the density of proteins to label the sample with. 1.0 is 1 fluorophore per nm^3, which is not really realistic and should provide a good upperbound.|
 | protein_noise | float | between 0.0 and 1.0 | the proportion of proteins that fly away from the labeled region. Uses a gaussian distirbution around the original location. The standard devitation for that gaussian can be modified directly in the noise function in src/labeling.py but the default should provide fairly realistic results.|
 | antibody_amp | float | greater than 1.0 | amplifies the labeling, as well as the noise. Tipically 5.0 or 10.0.|

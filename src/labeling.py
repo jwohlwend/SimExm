@@ -77,7 +77,7 @@ def label(gt_dataset, volume_dim, voxel_dim, labeling_params):
     return labeled_volumes, labeled_cells
 
 
-def brainbow(gt_dataset, volume_dim, voxel_dim, region, density,\
+def brainbow(gt_dataset, volume_dim, voxel_dim, region, labeling_density,\
              protein_density, protein_noise, antibody_amp, single_neuron, **kwargs):
     """
     Distributes fluorophores and the corresponding antibodies accross the given cells.
@@ -95,7 +95,7 @@ def brainbow(gt_dataset, volume_dim, voxel_dim, region, density,\
             dimensions of a ground truth voxel
         region: list of (z, x, y) tuples
             list of voxels
-        density: float64
+        labeling_density: float64
             the proportion of cells to label
         protein_density: float
             the density of protein labeling, in protein per nm^3
@@ -114,7 +114,7 @@ def brainbow(gt_dataset, volume_dim, voxel_dim, region, density,\
         labeled_cells: set
             the set of cell_ids, indicating which cells were labeled
     """
-    to_label = {cell_id for cell_id in gt_dataset if random_sample() < density}
+    to_label = {cell_id for cell_id in gt_dataset if random_sample() < labeling_density}
     labeled_cells = set()
     if single_neuron:
         # Get largest in the volume
